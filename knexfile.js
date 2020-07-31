@@ -1,13 +1,16 @@
 // Update with your config settings.
 
+const envConfig = require('./config/envConfig');
+require('dotenv').config(envConfig);
+
 module.exports = {
 
   development: {
     client: 'pg',
     connection: {
-      database: 'navedex_development',
-      user: 'postgres',
-      password: 'abc123',
+      database: process.env.PG_DATABASE_DEV,
+      user: process.env.PG_USER_DEV,
+      password: process.env.PG_PASSWORD_DEV,
     },
     migrations: {
       directory: `${__dirname}/src/database/migrations`,
