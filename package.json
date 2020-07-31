@@ -4,7 +4,7 @@
   "description": "Test for company Nave",
   "main": "src/server.js",
   "scripts": {
-    "dev": "NODE_ENV=dev nodemon src/server.js"
+    "dev": "NODE_ENV=development nodemon src/server.js"
   },
   "author": "Gleider",
   "license": "ISC",
