@@ -9,8 +9,23 @@ module.exports = {
     client: 'pg',
     connection: {
       database: process.env.PG_DATABASE_DEV,
-      user: process.env.PG_USER_DEV,
-      password: process.env.PG_PASSWORD_DEV,
+      user: process.env.PG_USER,
+      password: process.env.PG_PASSWORD,
+    },
+    migrations: {
+      directory: `${__dirname}/src/database/migrations`,
+    },
+    seeds: {
+      directory: `${__dirname}/src/database/seeds`,
+    },
+  },
+
+  test: {
+    client: 'pg',
+    connection: {
+      database: process.env.PG_DATABASE_TEST,
+      user: process.env.PG_USER,
+      password: process.env.PG_PASSWORD,
     },
     migrations: {
       directory: `${__dirname}/src/database/migrations`,
