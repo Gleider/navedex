@@ -10,6 +10,9 @@ const User = bookshelf.model('User', {
   naver() {
     return this.hasMany('Naver');
   },
+  project() {
+    return this.hasMany('Project');
+  },
   initialize() {
     this.on('saving', async (model) => {
       model.set('id', uuid());

@@ -7,6 +7,9 @@ const Project = bookshelf.model('Project', {
   naver() {
     return this.belongsToMany('Naver');
   },
+  user() {
+    return this.belongsTo('User');
+  },
   initialize() {
     this.on('saving', async (model) => {
       model.set('id', uuid());
