@@ -8,7 +8,7 @@ const User = bookshelf.model('User', {
   hasTimestamps: true,
   hidden: ['password'],
   naver() {
-    return this.hasOne('Naver');
+    return this.hasMany('Naver');
   },
   initialize() {
     this.on('saving', async (model) => {
