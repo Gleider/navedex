@@ -80,12 +80,10 @@ module.exports = {
       if (req.body.id) {
         return res.status(400).json({ Error: 'Is not allowed edit id' });
       }
-      console.log(id);
-      const naver = await Naver.where({ id })
+      await Naver.where({ id })
         .save({ name: 'aaa' }, {
           method: 'update', patch: true, require: false,
         });
-      console.log(naver);
 
       // console.log(updated);
       return res.status(200).json('Updated with success');
