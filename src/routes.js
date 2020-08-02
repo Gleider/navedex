@@ -11,6 +11,7 @@ routes.post('/login', AuthController.login);
 
 routes.use(authMiddleware);
 // all routes below need authorization
+routes.get('/navers', NaverController.index);
 routes.post('/navers', NaverController.store);
 
 routes.get('/users', UserController.index);
