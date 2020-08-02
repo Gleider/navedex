@@ -20,6 +20,32 @@ module.exports = {
     }
   },
 
+  async show(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { user_id } = req;
+
+      const project = await Project
+        .where({ id, user_id })
+        .fetch({
+          withRelated: 'naver',
+          require: false,
+          columns: ['id', 'name', 'created_at', 'updated_at'],
+        });
+
+      if (!project) {
+        return res.status(400).json({ Error: 'Project not found' });
+      }
+      return res.status(200).json(project);
+    } catch (error) {
+      // code of exception when put a wrong UUID
+      if (error.code === '22P02') {
+        return res.status(400).json({ Error: 'Pattern id is wrong' });
+      }
+      return next(error.message);
+    }
+  },
+
   async store(req, res, next) {
     try {
       const { name, navers } = req.body;
