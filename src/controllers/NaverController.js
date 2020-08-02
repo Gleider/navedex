@@ -29,9 +29,10 @@ module.exports = {
   async show(req, res, next) {
     try {
       const { id } = req.params;
+      const { user_id } = req;
 
       const naver = await Naver
-        .where('id', id)
+        .where({ id, user_id })
         .fetch({ require: false });
 
       if (!naver) {
