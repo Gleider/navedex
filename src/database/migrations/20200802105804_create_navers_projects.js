@@ -2,10 +2,12 @@ exports.up = function (knex) {
   return knex.schema.createTable('navers_projects', (t) => {
     t.uuid('naver_id')
       .references('navers.id')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     t.uuid('project_id')
       .references('projects.id')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     t.timestamp('updated_at').defaultTo(knex.fn.now());
     t.timestamp('created_at').defaultTo(knex.fn.now());
   });
