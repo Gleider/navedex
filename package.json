@@ -4,10 +4,7 @@
   "description": "Test for company Nave",
   "main": "src/server.js",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon src/server.js",
-    "pretest": "npx knex migrate:latest --env test",
-    "test": "NODE_ENV=test jest",
-    "posttest": "npx knex migrate:rollback --all --env test "
+    "dev": "NODE_ENV=development nodemon src/server.js"
   },
   "author": "Gleider",
   "license": "ISC",
@@ -15,13 +12,14 @@
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "jest": "^26.2.2",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bookshelf": "^1.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.2",
     "pg": "^8.3.0",
     "uuid": "^8.3.0"
