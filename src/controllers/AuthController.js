@@ -30,6 +30,9 @@ module.exports = {
       await User.forge().save({ email, password });
       return res.status(201).json('Successfully registered user');
     } catch (error) {
+      if (error.message === 'email') {
+        return res.status(400).json({ Error: 'Email already exists' });
+      }
       return next(error.message);
     }
   },
