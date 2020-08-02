@@ -73,4 +73,36 @@ module.exports = {
       return next(error.message);
     }
   },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (req.body.id) {
+        return res.status(400).json({ Error: 'Is not allowed edit id' });
+      }
+      await Project.where({ id })
+        .save({ ...req.body }, {
+          method: 'update', patch: true, require: false,
+        });
+
+      // console.log(updated);
+      return res.status(200).json('Updated with success');
+    } catch (error) {
+      return next(error.message);
+    }
+  },
+
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      await Project.where({ id }).destroy();
+      return res.status(200).json('Project removed with success');
+    } catch (error) {
+      // console.log(error);
+      if (error.message === 'No Rows Deleted') {
+        return res.status(400).json({ Error: 'Project not found' });
+      }
+      return next(error.message);
+    }
+  },
 };
