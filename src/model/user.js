@@ -16,7 +16,7 @@ const User = bookshelf.model('User', {
       const password = await bcrypt.hash(model.get('password'), 10);
       model.set('password', password);
       return User.forge({ email: model.get('email') }).fetch({ require: false }).then((user) => {
-        if (user) throw new Error('Email already exists');
+        if (user) throw new Error('email');
       });
     });
   },
