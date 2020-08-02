@@ -26,6 +26,27 @@ module.exports = {
     }
   },
 
+  async show(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const naver = await Naver
+        .where('id', id)
+        .fetch({ require: false });
+
+      if (!naver) {
+        return res.status(400).json({ Error: 'User not found' });
+      }
+      return res.status(200).json(naver);
+    } catch (error) {
+      // code of exception when put a wrong UUID
+      if (error.code === '22P02') {
+        return res.status(400).json({ Error: 'Pattern id is wrong' });
+      }
+      return next(error.message);
+    }
+  },
+
   async store(req, res, next) {
     try {
       const {
@@ -48,6 +69,40 @@ module.exports = {
 
       return res.status(201).send(user);
     } catch (error) {
+      return next(error.message);
+    }
+  },
+
+  async update(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (req.body.id) {
+        return res.status(400).json({ Error: 'Is not allowed edit id' });
+      }
+      console.log(id);
+      const naver = await Naver.where({ id })
+        .save({ name: 'aaa' }, {
+          method: 'update', patch: true, require: false,
+        });
+      console.log(naver);
+
+      // console.log(updated);
+      return res.status(200).json('Updated with success');
+    } catch (error) {
+      return next(error.message);
+    }
+  },
+
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      await Naver.where({ id }).destroy();
+      return res.status(200).json('Naver removed with success');
+    } catch (error) {
+      // console.log(error);
+      if (error.message === 'No Rows Deleted') {
+        return res.status(400).json({ Error: 'Naver not found' });
+      }
       return next(error.message);
     }
   },
