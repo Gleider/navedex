@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
   const [, token] = auth.split(' ');
   try {
     const decoded = await promisify(jwt.verify)(token, process.env.TOKEN_SECRET);
-    req.userId = decoded.id;
+    req.user_id = decoded.id;
     return next();
   } catch (error) {
     return res.status(401).json({ Error: 'Token invalid' });
