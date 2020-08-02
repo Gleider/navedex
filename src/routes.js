@@ -20,6 +20,7 @@ routes.put('/navers/:id', NaverController.update);
 routes.delete('/navers/:id', NaverController.delete);
 
 // Projects
+routes.get('/projects', ProjectController.index);
 routes.post('/projects', ProjectController.store);
 
 routes.get('/users', UserController.index);
