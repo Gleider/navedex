@@ -12,7 +12,10 @@ routes.post('/login', AuthController.login);
 routes.use(authMiddleware);
 // all routes below need authorization
 routes.get('/navers', NaverController.index);
+routes.get('/navers/:id', NaverController.show);
 routes.post('/navers', NaverController.store);
+routes.put('/navers/:id', NaverController.update);
+routes.delete('/navers/:id', NaverController.delete);
 
 routes.get('/users', UserController.index);
 routes.post('/users', UserController.create);
