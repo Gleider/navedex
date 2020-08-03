@@ -1,4 +1,5 @@
 const Naver = require('../model/naver');
+const { NaverProject, NaverProjects } = require('../model/naverProject');
 
 module.exports = {
   async index(req, res, next) {
@@ -18,7 +19,10 @@ module.exports = {
         .where('user_id', user_id)
         .query(query)
         .query('where', 'admission_date', '<=', dt)
-        .fetchAll({ require: false });
+        .fetchAll({
+          require: false,
+          columns: ['id', 'name', 'birthdate', 'admission_date', 'job_role', 'created_at', 'updated_at'],
+        });
 
       return res.status(200).json(navers);
     } catch (error) {
@@ -33,12 +37,16 @@ module.exports = {
 
       const naver = await Naver
         .where({ id, user_id })
-        .fetch({ require: false });
+        .fetch({
+          require: false,
+          withRelated: [{ project: (qb) => qb.select('id', 'name') }],
+          columns: ['id', 'name', 'birthdate', 'admission_date', 'job_role', 'created_at', 'updated_at'],
+        });
 
       if (!naver) {
         return res.status(400).json({ Error: 'User not found' });
       }
-      return res.status(200).json(naver);
+      return res.status(200).json(naver.toJSON({ omitPivot: true }));
     } catch (error) {
       // code of exception when put a wrong UUID
       if (error.code === '22P02') {
@@ -51,7 +59,7 @@ module.exports = {
   async store(req, res, next) {
     try {
       const {
-        name, birthdate, admission_date, job_role,
+        name, birthdate, admission_date, job_role, projects,
       } = req.body;
       const { user_id } = req;
 
@@ -60,15 +68,21 @@ module.exports = {
           .json({ Error: 'Name, birthdate, admission date and job role are required' });
       }
 
-      const user = await Naver.forge().save({
+      const naver = await Naver.forge().save({
         user_id,
         name,
         birthdate,
         admission_date,
         job_role,
       });
+      const naver_id = naver.get('id');
+      const projectsObject = projects
+        .map((project, i) => ({ ...i, project_id: project, naver_id }));
 
-      return res.status(201).send(user);
+      const naverProject = await NaverProjects.forge(projectsObject);
+      await naverProject.invokeThen('save');
+
+      return res.status(201).send(naver);
     } catch (error) {
       return next(error.message);
     }
@@ -80,12 +94,19 @@ module.exports = {
       if (req.body.id) {
         return res.status(400).json({ Error: 'Is not allowed edit id' });
       }
-      await Naver.where({ id })
-        .save({ name: 'aaa' }, {
-          method: 'update', patch: true, require: false,
-        });
+      const { projects, ...body } = req.body;
 
-      // console.log(updated);
+      await Naver.forge({ id })
+        .save({ ...body }, { method: 'update', patch: true, require: false });
+      if (projects) {
+        const projectsObject = projects
+          .map((project, i) => ({ ...i, project_id: project, naver_id: id }));
+
+        await NaverProject.where({ naver_id: id }).destroy();
+
+        const naverProject = await NaverProjects.forge(projectsObject);
+        await naverProject.invokeThen('save');
+      }
       return res.status(200).json('Updated with success');
     } catch (error) {
       return next(error.message);
