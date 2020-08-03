@@ -1,6 +1,5 @@
 const express = require('express');
 const AuthController = require('./controllers/AuthController');
-const UserController = require('./controllers/UserController');
 const NaverController = require('./controllers/NaverController');
 const ProjectController = require('./controllers/ProjectController');
 const authMiddleware = require('./middlewares/auth');
@@ -25,8 +24,5 @@ routes.get('/projects/:id', ProjectController.show);
 routes.post('/projects', ProjectController.store);
 routes.put('/projects/:id', ProjectController.update);
 routes.delete('/projects/:id', ProjectController.delete);
-
-routes.get('/users', UserController.index);
-routes.post('/users', UserController.create);
 
 module.exports = routes;
