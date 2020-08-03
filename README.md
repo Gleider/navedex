@@ -50,7 +50,11 @@ Link bara baixa o arquivo de teste do Insomnia: [Download](https://drive.google.
 No Insomnia estão todas as rotas incluindo os filtros. Carregando as seeds, é possível testar todas as rotas GET com os dados que jã estão alimentados no banco. Os dados que estão em Create tanto de Navers quanto de Projects também já estão prontos e corretos para serem testados. Todas as funcionalidades requisitadas estão funcionando.
 
 ## Referências
+
 http://knexjs.org/
+
 https://bookshelfjs.org/
+
 https://expressjs.com/pt-br/
+
 -e um pouquinho de Stack Overflow-
