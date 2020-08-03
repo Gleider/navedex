@@ -8,7 +8,7 @@
 * Express
 
 ## Informações
-Consegui fazer todas os requisitos solicitados.
+Consegui fazer todas os requisitos solicitados. A única pequena mudança que fiz foi utilizar UUID no lugar de ID auto incremental.
 
 ### Dificuldades
 Nunca tinha usado o Knex nem o Bookshelf, então no começo tive um pouco de problemas, principalmente com o Bookshelf, pois tem uma documentação que algumas vezes não fica bem claro como executar determinada tarefa. Então provavelmente tinha maneiras bem mais eficientes de desenvolver algumas coisas que fiz.
