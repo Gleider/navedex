@@ -12,7 +12,9 @@ const Project = bookshelf.model('Project', {
   },
   initialize() {
     this.on('saving', async (model) => {
-      model.set('id', uuid());
+      if (!model.get('id')) {
+        model.set('id', uuid());
+      }
     });
   },
 });

@@ -15,7 +15,9 @@ const User = bookshelf.model('User', {
   },
   initialize() {
     this.on('saving', async (model) => {
-      model.set('id', uuid());
+      if (!model.get('id')) {
+        model.set('id', uuid());
+      }
       const password = await bcrypt.hash(model.get('password'), 10);
       model.set('password', password);
       return User.forge({ email: model.get('email') }).fetch({ require: false }).then((user) => {

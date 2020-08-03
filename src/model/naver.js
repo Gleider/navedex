@@ -12,7 +12,9 @@ const Naver = bookshelf.model('Naver', {
   },
   initialize() {
     this.on('saving', async (model) => {
-      model.set('id', uuid());
+      if (!model.get('id')) {
+        model.set('id', uuid());
+      }
     });
   },
 });
