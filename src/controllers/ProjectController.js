@@ -10,9 +10,12 @@ module.exports = {
       const query = name ? { where: { name } } : {};
 
       const projects = await Project
-        .where('user_id', user_id)
+        .where({ user_id })
         .query(query)
-        .fetchAll({ require: false });
+        .fetchAll({
+          require: false,
+          columns: ['id', 'name', 'created_at', 'updated_at'],
+        });
 
       return res.status(200).json(projects);
     } catch (error) {
@@ -28,7 +31,7 @@ module.exports = {
       const project = await Project
         .where({ id, user_id })
         .fetch({
-          withRelated: 'naver',
+          withRelated: [{ naver: (qb) => qb.select('id', 'name', 'birthdate', 'admission_date', 'job_role') }],
           require: false,
           columns: ['id', 'name', 'created_at', 'updated_at'],
         });
@@ -36,7 +39,7 @@ module.exports = {
       if (!project) {
         return res.status(400).json({ Error: 'Project not found' });
       }
-      return res.status(200).json(project);
+      return res.status(200).json(project.toJSON({ omitPivot: true }));
     } catch (error) {
       // code of exception when put a wrong UUID
       if (error.code === '22P02') {
@@ -80,12 +83,19 @@ module.exports = {
       if (req.body.id) {
         return res.status(400).json({ Error: 'Is not allowed edit id' });
       }
-      await Project.where({ id })
-        .save({ ...req.body }, {
-          method: 'update', patch: true, require: false,
-        });
+      const { navers, ...body } = req.body;
 
-      // console.log(updated);
+      await Project.forge({ id })
+        .save({ ...body }, { method: 'update', patch: true, require: false });
+      if (navers) {
+        const naversObject = navers
+          .map((naver, i) => ({ ...i, naver_id: naver, project_id: id }));
+
+        await NaverProject.where({ project_id: id }).destroy();
+
+        const naverProject = await NaverProjects.forge(naversObject);
+        await naverProject.invokeThen('save');
+      }
       return res.status(200).json('Updated with success');
     } catch (error) {
       return next(error.message);
