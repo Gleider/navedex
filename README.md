@@ -1,4 +1,4 @@
-# Teste para a empresa Nave
+# Navedex
 
 ## Tecnologias utilizadas
 * Banco de dados PostgreSQL
